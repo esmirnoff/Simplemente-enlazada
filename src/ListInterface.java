@@ -43,7 +43,7 @@ public interface ListInterface {
     public Object[] toArray();
 
     public Object[] toArray(Object[] object);
-    
+
     public Object getBeforeTo(ListNode node);
 
     public Object getNextTo(ListNode node);
