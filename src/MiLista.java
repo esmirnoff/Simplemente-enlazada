@@ -146,16 +146,43 @@ public class MiLista implements ListInterface{
 
     @Override
     public boolean set(ListNode node, Object object) {
-        return false;
+        if (node == null){
+            return false;
+        }else{
+            node.dato = object;
+            return true;
+        }
     }
 
     @Override
     public boolean remove(ListNode node) {
+        if (node == null || cabeza == null) {
+            return false;
+        } else if (node == cabeza) {
+            cabeza = cabeza.siguiente;
+            return true;
+    }else {
+            ListNode iterador = cabeza;
+            while (iterador.siguiente != null){
+                if (iterador.siguiente == node){
+                    iterador.siguiente = iterador.siguiente.siguiente;
+                    return true;
+                }
+                iterador = iterador.siguiente;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean contains(Object object) {
+        ListNode iterador = cabeza;
+        while (iterador.siguiente != null){
+            if (iterador.dato.equals(object)){
+                return true;
+            }
+            iterador = iterador.siguiente;
+        }
         return false;
     }
 
