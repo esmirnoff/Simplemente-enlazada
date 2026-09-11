@@ -188,37 +188,140 @@ public class MiLista implements ListInterface{
 
     @Override
     public Iterator<ListNode> iterator() {
-        return null;
+        return new Iterator<ListNode>() {
+            private ListNode actual = cabeza;
+            @Override
+            public boolean hasNext() {
+                return actual != null;
+            }
+
+            @Override
+            public ListNode next() {
+                ListNode Temp = actual;
+                actual = actual.siguiente;
+                return Temp;
+            }
+        };
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        int contador = 0;
+        ListNode iterador = cabeza;
+        while (iterador.siguiente != null){
+            contador++;
+            iterador = iterador.siguiente;
+        }
+        Object[] array = new Object[contador];
+        iterador = cabeza;
+        int i = 0;
+        while (iterador.siguiente != null){
+            array[i++] = iterador.dato;
+            iterador = iterador.siguiente;
+        }
+        return array;
     }
 
     @Override
     public Object[] toArray(Object[] object) {
-        return new Object[0];
+        int i = 0;
+        ListNode iterador = cabeza;
+        while (iterador != null){
+            if(i<object.length){
+                object[i] = iterador.dato;
+            }
+            iterador = iterador.siguiente;
+            i++;
+        }
+        if (i>object.length){
+            Object[] nuevo = new Object[i];
+            iterador = cabeza;
+            int j = 0;
+            while (iterador != null){
+                nuevo[j++] = iterador.dato;
+                iterador = iterador.siguiente;
+            }
+            return nuevo;
+        }
+        return object;
     }
 
     @Override
     public Object getBeforeTo(ListNode node) {
+        if (node == null || cabeza == null || node == cabeza){
+            return null;
+        }
+        ListNode iterador = cabeza;
+        while (iterador.siguiente != null){
+            if (iterador.siguiente == node){
+                return iterador.dato;
+            }
+            iterador = iterador.siguiente;
+        }
         return null;
     }
 
     @Override
     public Object getNextTo(ListNode node) {
-        return null;
+        if(node == null || node.siguiente == null){
+            return null;
+        }else{
+            return node.siguiente.dato;
+        }
     }
 
     @Override
     public MiLista subList(ListNode from, ListNode to) {
-        return null;
+        if (from == null || cabeza == null){
+            return null;
+        }
+        MiLista nuevaLista = new MiLista();
+        ListNode iterador = from;
+        ListNode nuevaCabeza = null;
+        ListNode ultimo = null;
+        while (iterador != null){
+            ListNode nuevoNodo = new ListNode(iterador.dato);
+            if (nuevaCabeza == null){
+                nuevaCabeza = nuevoNodo;
+                nuevaLista.cabeza = nuevoNodo;
+            }else {
+                ultimo.siguiente = nuevoNodo;
+            }
+            ultimo = nuevoNodo;
+            if(iterador == to){
+                break;
+            }
+            iterador = iterador.siguiente;
+        }
+        return nuevaLista;
     }
 
     @Override
     public MiLista sortList() {
-        return null;
+        if (cabeza == null || cabeza.siguiente == null){
+            return this;
+        }else{
+            ListNode sorted = null;
+            ListNode actual = cabeza;
+            while (actual != null){
+                ListNode next = actual.siguiente;
+                if (sorted == null || ((Comparable)actual.dato).compareTo(sorted) < 0){
+                    actual.siguiente = sorted;
+                    sorted = actual;
+                }else {
+                    ListNode temp = sorted;
+                    while (temp.siguiente != null && ((Comparable)actual.dato).compareTo(temp.siguiente.dato) >= 0){
+                        temp = temp.siguiente;
+                    }
+                    actual.siguiente = temp.siguiente;
+                    temp.siguiente = actual;
+                }
+                actual = next;
+            }
+            cabeza = sorted;
+            return this;
+        }
+
     }
 
     @Override
